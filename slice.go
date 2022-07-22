@@ -73,7 +73,12 @@ func CountIf[T any](s []T, f func(T) bool) (ret int) {
 
 // Contains reports whether v is present in s.
 func Contains[T comparable](s []T, v T) bool {
-	return Find(s, v) >= 0
+	for i := range s {
+		if s[i] == v {
+			return true
+		}
+	}
+	return false
 }
 
 // Equal reports whether two slices are equal: the same length and all elements equal.
@@ -153,10 +158,5 @@ func Max[T any](x, y T, f func(T, T) bool) T {
 // NoneOf returns true if f returns false for all the elements in s
 // or if s is empty, and false otherwise.
 func NoneOf[T any](s []T, f func(T) bool) bool {
-	for _, e := range s {
-		if f(e) {
-			return false
-		}
-	}
-	return true
+	return !AnyOf(s, f)
 }
